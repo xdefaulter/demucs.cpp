@@ -202,10 +202,17 @@ int main(int argc, const char **argv)
             exit(1);
         }
 
-        // insert target_name into the path after the digit
-        // e.g. target_name_0_drums.wav
-        p_target.replace_filename("target_" + std::to_string(target) + "_" +
-                                  target_name + ".wav");
+        if (nb_sources == 2)
+        {
+            p_target.replace_filename(target_name + ".wav");
+        }
+        else
+        {
+            // insert target_name into the path after the digit
+            // e.g. target_name_0_drums.wav
+            p_target.replace_filename("target_" + std::to_string(target) +
+                                      "_" + target_name + ".wav");
+        }
 
         std::cout << "Writing wav file " << p_target << std::endl;
 

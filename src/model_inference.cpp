@@ -211,9 +211,9 @@ void demucscpp::model_inference(
     buffers.saved_3 = buffers.x_3;
     buffers.savedt_3 = buffers.xt_3;
 
-    if (model.is_4sources)
+    if (model.n_sources == 4)
     {
-        auto *ct_4s = static_cast<demucs_crosstransformer_4s *>(
+        auto *ct_4s = static_cast<demucscpp::demucs_crosstransformer_4s *>(
             model.crosstransformer.get());
         // bottom channels = 512
 
@@ -349,23 +349,16 @@ void demucscpp::model_inference(
     // so we could have symmetry between the tensor3dxf of the freq and time
     // branches
 
-    int nb_out_sources = model.is_4sources ? 4 : 6;
+    int nb_out_sources = model.n_sources;
 
     // 4 sources, 2 channels * 2 complex channels (real+imag), F bins, T frames
     Eigen::Tensor4dXf x_4d = Eigen::Tensor4dXf(
         nb_out_sources, 4, buffers.x.dimension(1), buffers.x.dimension(2));
 
     // 4 sources, 2 channels, N samples
-    std::vector<Eigen::MatrixXf> xt_3d = {
-        Eigen::MatrixXf(2, buffers.xt.dimension(2)),
-        Eigen::MatrixXf(2, buffers.xt.dimension(2)),
-        Eigen::MatrixXf(2, buffers.xt.dimension(2)),
-        Eigen::MatrixXf(2, buffers.xt.dimension(2))};
-
-    // add two more sources
-    if (!model.is_4sources)
+    std::vector<Eigen::MatrixXf> xt_3d;
+    for (int i = 0; i < nb_out_sources; ++i)
     {
-        xt_3d.push_back(Eigen::MatrixXf(2, buffers.xt.dimension(2)));
         xt_3d.push_back(Eigen::MatrixXf(2, buffers.xt.dimension(2)));
     }
 

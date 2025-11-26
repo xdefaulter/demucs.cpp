@@ -722,7 +722,7 @@ static void setUpTestSuite()
     }
 
     // load model from "../ggml-demucs/ggml-model-htdemucs-f16.bin"
-    std::string model_file = "../ggml-demucs/ggml-model-htdemucs-4s-f16.bin";
+    std::string model_file = "ggml-demucs/ggml-model-htdemucs-4s-f16.bin";
 
     auto ret = load_demucs_model(model_file, &model);
     std::cout << "demucs_model_load returned " << (ret ? "true" : "false")

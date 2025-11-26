@@ -282,6 +282,11 @@ struct demucs_crosstransformer_6s : crosstransformer_base
     demucs_crosstransformer_6s() : crosstransformer_base(384, 1152, 1536){};
 };
 
+struct demucs_crosstransformer_2s : crosstransformer_base
+{
+    demucs_crosstransformer_2s() : crosstransformer_base(384, 1152, 1536){};
+};
+
 struct demucs_model
 {
     int n_sources;
@@ -560,9 +565,17 @@ initialize_crosstransformer(int n_sources)
     {
         return std::make_unique<struct demucs_crosstransformer_4s>();
     }
-    else
+    else if (n_sources == 6)
     {
         return std::make_unique<struct demucs_crosstransformer_6s>();
+    }
+    else if (n_sources == 2)
+    {
+        return std::make_unique<struct demucs_crosstransformer_2s>();
+    }
+    else
+    {
+        throw std::runtime_error("Unsupported number of sources");
     }
 }
 

@@ -13,7 +13,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-array-bounds")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -DEIGEN_FAST_MATH=0 -O0")
 
 set(CMAKE_CXX_FLAGS_RELEASE "-Ofast -march=native -fno-unsafe-math-optimizations -freciprocal-math -fno-signed-zeros")
@@ -133,8 +133,11 @@ set(BUILD_GMOCK OFF CACHE BOOL "Disable gmock in googletest" FORCE)
 add_subdirectory(vendor/googletest)
 
 # include test/*.cpp as test files
-file(GLOB TEST_SOURCES "test/*.cpp")
+file(GLOB TEST_SOURCES "test/test_layers.cpp" "test/test_dsp.cpp" "test/test_layers_v3.cpp")
 
 add_executable(demucs.cpp.test ${TEST_SOURCES})
+add_executable(demucs.cpp.test_2stem test/test_layers_2stem.cpp)
 target_link_libraries(demucs.cpp.test demucs.cpp.lib gtest gtest_main libnyquist)
-add_test(NAME tests COMMAND demucs.cpp.test)
+target_link_libraries(demucs.cpp.test_2stem demucs.cpp.lib gtest gtest_main libnyquist)
+add_test(NAME tests COMMAND $<TARGET_FILE:demucs.cpp.test>)
+add_test(NAME tests_2stem COMMAND $<TARGET_FILE:demucs.cpp.test_2stem>)
