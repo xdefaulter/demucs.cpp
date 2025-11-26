@@ -122,7 +122,7 @@ shift_inference(const struct demucscpp::demucs_model &model,
     Eigen::Tensor3dXf waveform_outputs =
         split_inference(model, shifted_audio, cb);
 
-    int nb_out_sources = model.is_4sources ? 4 : 6;
+    int nb_out_sources = model.n_sources;
 
     // trim the output to the original length
     // waveform_outputs = waveform_outputs[..., max_shift:max_shift + length]
@@ -145,7 +145,7 @@ split_inference(const struct demucscpp::demucs_model &model,
     int segment_samples =
         (int)(demucscpp::SEGMENT_LEN_SECS * demucscpp::SUPPORTED_SAMPLE_RATE);
 
-    int nb_out_sources = model.is_4sources ? 4 : 6;
+    int nb_out_sources = model.n_sources;
 
     // let's create reusable buffers with padded sizes
     struct demucscpp::demucs_segment_buffers buffers(2, segment_samples,
@@ -264,7 +264,7 @@ static Eigen::Tensor3dXf segment_inference(
     demucscpp::model_inference(model, buffers, stft_buf, cb, current_progress,
                                segment_progress);
 
-    int nb_out_sources = model.is_4sources ? 4 : 6;
+    int nb_out_sources = model.n_sources;
 
     // copy from buffers.targets_out into chunk_out with center trimming
     Eigen::Tensor3dXf chunk_out =

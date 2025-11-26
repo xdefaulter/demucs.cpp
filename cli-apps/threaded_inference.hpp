@@ -122,7 +122,7 @@ threaded_inference(const struct demucscpp::demucs_model &model,
         thread.join();
     }
 
-    int nb_out_sources = model.is_4sources ? 4 : 6;
+    int nb_out_sources = model.n_sources;
 
     // Calculate total output size and create the output tensor
     Eigen::Tensor3dXf final_output(nb_out_sources, 2, total_length);

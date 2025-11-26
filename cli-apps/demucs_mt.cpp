@@ -149,7 +149,7 @@ int main(int argc, const char **argv)
         exit(1);
     }
 
-    int nb_sources = model.is_4sources ? 4 : 6;
+    int nb_sources = model.n_sources;
 
     std::cout << "Starting Demucs (" << std::to_string(nb_sources)
               << "-source) inference" << std::endl;
@@ -160,9 +160,7 @@ int main(int argc, const char **argv)
 
     out_targets = audio_targets;
 
-    int nb_out_sources = model.is_4sources ? 4 : 6;
-
-    for (int target = 0; target < nb_out_sources; ++target)
+    for (int target = 0; target < nb_sources; ++target)
     {
         // now write the 4 audio waveforms to files in the output dir
         // using libnyquist
